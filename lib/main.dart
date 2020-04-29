@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ml_camera_app/ImageActivity.dart';
+import 'package:toast/toast.dart';
 
 void main() => runApp(MyApp());
 
@@ -63,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(context, CupertinoPageRoute(builder: (context) => ImageActivity(image: image)));
     }
   }
+
+  String serverUrl = "";
  
 
   @override
@@ -81,153 +84,165 @@ class _MyHomePageState extends State<MyHomePage> {
         width: width,
         decoration: BoxDecoration(
           color: Colors.white,
-          // image: DecorationImage(
-          //   colorFilter: new ColorFilter.mode(Colors.white.withOpacity(0.1), BlendMode.dstATop),
-          //   image: AssetImage("assets/robot.png",),
-          //   fit: BoxFit.fill
-          // )
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: width*0.3,
-              width: width*0.3,
-              child: Image.asset("assets/rubixe.png")
-              
-            ),
-            // SizedBox(
-            //   width: width*0.4,
-            //   height: width*0.4,
-            //   child: FlareActor(
-            //     "assets/rubixe.flr",
-            //     animation: "Untitled",
-            //   ),
-            // )
-            SizedBox(height: 8,),
-            Text("AI Internship Program", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
-            // SizedBox(height: 4,),
-            Text("Rubixe Incubation Center", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-            SizedBox(height: 24,),
-            Container(
-              padding: EdgeInsets.all(8.0),
-              width: double.infinity,
-              height: 125,
-              decoration: BoxDecoration(
-                color: Color(0xfff7f7f7),
-                borderRadius: BorderRadius.circular(12.0)
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: width*0.3,
+                width: width*0.3,
+                child: Image.asset("assets/rubixe.png")
+                
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Project Name Here", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                        Text("Project Description Lorem Ipsum is simply dummy text of the printing and typesetting industry. ", style: TextStyle(fontSize: 14), textAlign: TextAlign.justify,)
-                      ],
-                    )
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: SizedBox(
-                      width: width*0.4,
-                      height: width*0.4,
-                      child: FlareActor(
-                        "assets/robot.flr",
-                        animation: "reposo",
-                      ),
-                    )
+              SizedBox(height: 8,),
+              Text("AI Internship Program", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
+              // SizedBox(height: 4,),
+              Text("Rubixe Incubation Center", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+              SizedBox(height: 24,),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                width: double.infinity,
+                height: 125,
+                decoration: BoxDecoration(
+                  color: Color(0xfff7f7f7),
+                  borderRadius: BorderRadius.circular(12.0)
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Healthy Diet", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                          Text("Our Healthy Diet project is focused on combining machine learning with real user input to create an advanced method for nutritional tracking.", style: TextStyle(fontSize: 14), textAlign: TextAlign.justify,)
+                        ],
+                      )
+                    ),
                     
-                  )
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
+                        width: width*0.4,
+                        height: width*0.4,
+                        child: FlareActor(
+                          "assets/robot.flr",
+                          animation: "reposo",
+                        ),
+                      )
+                      
+                    )
+                  ],
+                ),
+                
+              ),
+
+              Container(
+                        height: 60,
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: new TextField(
+                          obscureText: false,
+                          keyboardType: TextInputType.url,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(16.0),
+                            hintText: "Enter server url",
+                            hintStyle: new TextStyle(fontSize: 16.0),
+                            focusedBorder: OutlineInputBorder(borderRadius: 
+                              BorderRadius.circular(0),
+                              borderSide: const BorderSide(color: Colors.white)),
+                              enabledBorder: OutlineInputBorder(borderRadius: 
+                              BorderRadius.circular(0),
+                              borderSide: const BorderSide(color: Colors.white))
+                          ),
+                          onChanged: (text){
+                            serverUrl = text;
+                          },
+
+
+                        ),
+                      ),
+              SizedBox(height: 16,),
+                    
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Stack(
+                        children: <Widget>[
+                          Card(
+                            elevation: 4,
+                            child: SizedBox(
+                              height: width/2-48,
+                              width: width/2-32,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.camera, color: Color(0xff616161), size: 60,),
+                                  Text("Open Camera", style: TextStyle(fontSize: 16,))
+                                ],
+                              )
+                            ),
+                          ),
+                          MaterialButton(
+                              minWidth: width/2-48,
+                              height: 35,
+                              child: SizedBox(
+                                height: width/2-48,
+                                width: width/2-62,
+                              ),
+                              onPressed: () {
+                                if(serverUrl.length == 0){
+                                  Toast.show("Enter the server url at first", context);
+                                } else getImageFromCamera();
+                              },
+                            ),
+                          
+                        ],
+                      ),
+                  Stack(
+                        children: <Widget>[
+                          Card(
+                            elevation: 4,
+                            child: SizedBox(
+                              height: width/2-48,
+                              width: width/2-32,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.photo_library, color: Color(0xff616161), size: 60,),
+                                  Text("Open Gallery", style: TextStyle(fontSize: 16,))
+                                ],
+                              )
+                            ),
+                          ),
+                          MaterialButton(
+                              child: SizedBox(
+                                height: width/2-48,
+                                width: width/2-60,
+                              ),
+                              onPressed: () {
+                                if(serverUrl.length == 0){
+                                  Toast.show("Enter the server url at first", context);
+                                } else getImageFromGallery();
+                              },
+                            ),
+                          
+                        ],
+                      )
                 ],
               ),
-              
-            ),
-
-            SizedBox(height: 32,),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: Stack(
-                      children: <Widget>[
-                        Card(
-                          elevation: 4,
-                          child: SizedBox(
-                            height: width/2-48,
-                            width: width/2-32,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.camera, color: Color(0xff616161), size: 60,),
-                                Text("Open Camera", style: TextStyle(fontSize: 16,))
-                              ],
-                            )
-                          ),
-                        ),
-                        MaterialButton(
-                            minWidth: 200.0,
-                            height: 35,
-                            child: SizedBox(
-                              height: width/2-48,
-                              width: width/2-32,
-                            ),
-                            onPressed: () {
-                              getImageFromCamera();
-                            },
-                          ),
-                        
-                      ],
-                    )
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                    child: Stack(
-                      children: <Widget>[
-                        Card(
-                          elevation: 4,
-                          child: SizedBox(
-                            height: width/2-48,
-                            width: width/2-32,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.photo_library, color: Color(0xff616161), size: 60,),
-                                Text("Open Gallery", style: TextStyle(fontSize: 16,))
-                              ],
-                            )
-                          ),
-                        ),
-                        MaterialButton(
-                            minWidth: 200.0,
-                            height: 35,
-                            child: SizedBox(
-                              height: width/2-48,
-                              width: width/2-32,
-                            ),
-                            onPressed: () {
-                              getImageFromGallery();
-                            },
-                          ),
-                        
-                      ],
-                    )
-                  ),
-                ),
-              ],
-            )
-           
-          ],
-        ),
+            
+            ],
+          ),
+        )
       ),
       
     );

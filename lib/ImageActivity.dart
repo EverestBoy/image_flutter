@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:ml_camera_app/FoodCard.dart';
+import 'package:ml_camera_app/restServices/SendPicService.dart';
+import 'package:ml_camera_app/restServices/model/FoodModel.dart';
 import 'package:path/path.dart' as path;
 import 'package:flare_flutter/flare_actor.dart';
 
 class ImageActivity extends StatefulWidget {
   File image;
-  ImageActivity({this.image});
+  String postUrl;
+  ImageActivity({this.image, String postUrl});
   @override
   _ImageActivityState createState() => _ImageActivityState();
 }
@@ -17,7 +21,12 @@ class _ImageActivityState extends State<ImageActivity> {
   
 
   bool imageProgress = false;
+  List<FoodModel> foodModelList;
   String uploadedImage = "";
+  bool evalVisible = true;
+
+  SendPicService sendPicService = new SendPicService();
+
 
   Future uploadFile(BuildContext context) async {    
       print("\n\n\n\n\nUploading");
@@ -31,12 +40,14 @@ class _ImageActivityState extends State<ImageActivity> {
       StorageUploadTask uploadTask = reference.putFile(widget.image);
       setState(() {
         imageProgress = true;
+        evalVisible = false;
       });
 
       var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
       uploadedImage = dowurl.toString();
 
       print("Url is "+uploadedImage);
+      
       
       setState(() {
         imageProgress = false;
@@ -56,10 +67,39 @@ class _ImageActivityState extends State<ImageActivity> {
     // Uri location = (await uploadTask.future).downloadUrl;
 
  } 
+
+ bool foodLength = false;
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  uploadImage() async {
+    print("UPloading image");
+    setState(() {
+      imageProgress = true;
+      evalVisible = false;
+    });
+    sendPicService.setImage = widget.image;
+    sendPicService.setpostUrl = widget.postUrl;
+    foodModelList = await sendPicService.sendFood();
+    setState(() {
+      if(foodModelList.length>0){
+        foodLength = true;
+      }
+      imageProgress = false;
+    });
+    }
   
   
   @override
   Widget build(BuildContext context) {
+
+    
+
+    var width = MediaQuery.of(context).size.width;
 
     final evaButton = Material(
       elevation: 5.0,
@@ -72,7 +112,8 @@ class _ImageActivityState extends State<ImageActivity> {
       print("\n\n\n\n\nUploading");
 
           FocusScope.of(context).requestFocus(FocusNode());
-          uploadFile(context);
+          // uploadFile(context);
+          uploadImage();
 
 
           
@@ -90,26 +131,21 @@ class _ImageActivityState extends State<ImageActivity> {
         title: Text("Image Processing"),
         backgroundColor: Colors.red,
       ),
-      body: Stack(
-        children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
+      body: SingleChildScrollView(
+        child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  new SizedBox(height: 32,),
                   Container(
                     width: double.infinity,
                     child: Center(
                     child: new Container(
-                      width: 220.0,
-                      height: 220.0,
+                      width: double.infinity,
+                      height: width*0.8,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: FileImage(widget.image),
-                          fit: BoxFit.fill
+                          fit: BoxFit.cover
                         ),
-                        borderRadius: BorderRadius.circular(110.0),
                         border: Border.all(color: Colors.black12)
                       ),
                       // child: ClipRRect(
@@ -120,31 +156,43 @@ class _ImageActivityState extends State<ImageActivity> {
                     ),
                   )),
                   SizedBox(height: 16,),
-                  evaButton
+                  new Visibility(
+                    visible: evalVisible,
+                    child: evaButton,
+                  ),
+                  new Visibility(
+                    visible: imageProgress,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 200.0,
+                          height: 200.0,
+                          child: FlareActor(
+                            "assets/robot.flr",
+                            animation: "Cargando",
+                          ),
+                        ),
+                        Text("Please wait!")
+                      ],
+                    )
+                  ),
+
+                  if(!evalVisible & !foodLength) Text("Something went wrong"),
+
+                  if(!evalVisible & !foodLength) ListView(
+                  children: foodModelList
+                      .map(
+                        (FoodModel food) => FoodCard(food, context)
+                      )
+                      .toList(),
+                  ),
                   
                 ],
               )
             ),
-            new Visibility(
-              visible: imageProgress,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.black54,
-                child: Center(
-                  child: SizedBox(
-                    width: 420.0,
-                    height: 420.0,
-                    child: FlareActor(
-                      "assets/robot.flr",
-                      animation: "Cargando",
-                    ),
-                  )
-                ),
-              ),
-            )
-        ],
-      )
+            
+        
+      
       
     );
   }

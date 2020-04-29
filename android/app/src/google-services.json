@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "529048307111",
+    "firebase_url": "https://internproject-603d3.firebaseio.com",
+    "project_id": "internproject-603d3",
+    "storage_bucket": "internproject-603d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529048307111:android:a7808f7fb5994c04396282",
+        "android_client_info": {
+          "package_name": "com.example.ml_camera_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529048307111-eu3sra2od4jdka2fql1tv2f6k16jq59u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ml_camera_app",
+            "certificate_hash": "6a45bd852d288ef8ce460f99d821c549f1de90d4"
+          }
+        },
+        {
+          "client_id": "529048307111-ef0fd0ad9u26vr41pgtes0v56t3slejl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH8b84uikAUt1ExSqXw7KNRLVyUGmRbo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529048307111-ef0fd0ad9u26vr41pgtes0v56t3slejl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
